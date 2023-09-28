@@ -9,7 +9,6 @@ import cloudinary from "cloudinary";
 import fs from "fs";
 // login endpoint controller
 export const login = catchAsync(async (req, res, next) => {
-  console.log("insiders");
   const { email, password } = req.body;
   if (!email || !password)
     return next(new ErrorHandler(404, "fill all fields"));
@@ -22,10 +21,8 @@ export const login = catchAsync(async (req, res, next) => {
 
 // signup endpoint controller
 export const signup = catchAsync(async (req, res, next) => {
-  // console.log('in sider');
   const { name, email, password } = req.body;
   const file = req.files.avatar || null;
-  console.log(file);
   if (!name || !email || !password || !file)
     return next(new ErrorHandler(404, "fill all fields"));
   const ideal = await Auth.findOne({ email });
@@ -124,7 +121,6 @@ export const logout = catchAsync(async (req, res, next) => {
 
 // verify
 export const verify = catchAsync(async (req, res, next) => {
-  console.log('inthere');
   const { otp } = req.body;
   const userId = req.id;
   if (!userId)
@@ -132,7 +128,6 @@ export const verify = catchAsync(async (req, res, next) => {
 const user = await Auth.findById(userId);
 if (!user)
 return next(new ErrorHandler(401, "Unauthorized Access, Login Again!"));
-console.log('inthere 1');
 const ideal = await Auth.findOne({
   _id: userId,
   verificationOTP: otp,
@@ -146,12 +141,10 @@ return next(
   user.verificationOTP = null;
   user.verificationOTPExpire = null;
   user.verification = true;
-  console.log('inthere 2');
   await user.save();
   res
   .status(200)
   .json({ success: true, msg: "Account Verification Successful" });
-  console.log('inthere 3');
 });
 //editprofile
 export const editProfile = catchAsync(async (req, res, next) => {

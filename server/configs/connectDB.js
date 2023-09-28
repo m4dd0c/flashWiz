@@ -5,7 +5,6 @@ export const connectDB = async () => {
     await mongoose.connect(process.env.MONGO_URI, { dbName: "FlashWiz" });
     console.log("Connection with DB successful");
   } catch (error) {
-    console.log(error);
     console.log("Connection with DB failed");
   }
 };

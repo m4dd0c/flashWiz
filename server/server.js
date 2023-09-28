@@ -4,10 +4,6 @@ import cloudinary from "cloudinary";
 connectDB();
 const port = process.env.PORT || 4000;
 
-app.get("/", (req, res) => {
-  res.send("Server is Working...");
-});
-
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_KEY,

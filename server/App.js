@@ -11,17 +11,6 @@ const corsOptions = {
   credentials: true,
 };
 
-// app.use(cookieParser());
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-// app.use(cors(corsOptions));
-// app.use(
-//   fileUpload({
-//     useTempFiles: true,
-//     tempFileDir: "./tmp",
-//     limits: { fileSize: 50 * 1024 * 1024 }, //50mb
-//   })
-// );
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -43,14 +32,9 @@ app.use("/api/v1/auth", auth);
 app.use("/api/v1/admin", admin);
 app.use("/api/v1/card", cards);
 
-app.get("/api/v1/", (req, res) => {
-  console.log("hehe");
-  res.status(200).json({ success: true, msg: "server is working..." });
+app.get("/", (req, res) => {
+  res.send("Server is Working...");
 });
-app.post("/api/v1/file", (req, res) => {
-  const data = req.files;
-  console.log(req.files, "data");
-  res.status(200).json({ success: true });
-});
+
 // error middleware
 app.use(errorMiddleware);
