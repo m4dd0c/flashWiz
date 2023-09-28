@@ -66,7 +66,7 @@ export const signup = catchAsync(async (req, res, next) => {
     );
   //uploading avatar file to cloudinary
   const myCloud = await cloudinary.v2.uploader.upload(file.tempFilePath, {
-    folder: "StudyCard",
+    folder: "FlashWiz",
   });
   //deleting local avatar file from temp folder
   fs.rmSync("./tmp", { recursive: true });
@@ -172,7 +172,7 @@ export const editProfile = catchAsync(async (req, res, next) => {
     const myCloud = await cloudinary.v2.uploader.upload(
       file.avatar.tempFilePath,
       {
-        folder: "StudyCard",
+        folder: "FlashWiz",
       }
     );
     //deleting new file locally
