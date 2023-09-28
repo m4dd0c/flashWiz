@@ -1,4 +1,3 @@
-import { log } from "console";
 import { Auth } from "../Models/Auth.js";
 import { Card } from "../Models/Card.js";
 import { ErrorHandler } from "../utils/ErrorHandler.js";
@@ -41,7 +40,7 @@ export const signup = catchAsync(async (req, res, next) => {
   <html>
       <head>
           <meta name='viewport' content="width=device-width initial-scale=1.0">
-          <title>${otp} OTP - Verify Account | FlashCard</title>
+          <title>${otp} OTP - Verify Account | FlashWiz</title>
       </head>
       <body>
           <div>
@@ -55,7 +54,7 @@ export const signup = catchAsync(async (req, res, next) => {
 
   const mail = sendMail(
     email,
-    `${otp} OTP - Verify Your Account | FlashCard`,
+    `${otp} OTP - Verify Your Account | FlashWiz`,
     html
   );
   if (!mail)
@@ -202,19 +201,19 @@ export const forgetPassword = catchAsync(async (req, res, next) => {
   <html>
       <head>
           <meta name='viewport' content="width=device-width initial-scale=1.0">
-          <title>${otp} OTP - Reset Password | FlashCard</title>
+          <title>${otp} OTP - Reset Password | FlashWiz</title>
       </head>
       <body>
           <div>
               <p>Your Reset Password OTP: </p>
               <h5>${otp}</h5>
           </div>
-          <p><strong>Note: </strong>Please Don't share these OTP with anyone otherwise your flashcard account can be compromised<br/>If You havent requested for Reset Password OTP<br/>You can Ignore this message.</p>
+          <p><strong>Note: </strong>Please Don't share these OTP with anyone otherwise your FlashWiz account can be compromised<br/>If You havent requested for Reset Password OTP<br/>You can Ignore this message.</p>
           <p><strong>Note: </strong>This OTP is valid for 10 minutes only.</p>
       </body>
   </html>`;
 
-  const mail = sendMail(email, `${otp} OTP - Reset Password | FlashCard`, html);
+  const mail = sendMail(email, `${otp} OTP - Reset Password | FlashWiz`, html);
   if (!mail)
     return next(
       new ErrorHandler(
@@ -295,7 +294,7 @@ export const contact = catchAsync(async (req, res, next) => {
     <html>
         <head>
             <meta name='viewport' content="width=device-width initial-scale=1.0">
-            <title>FEEDBACK or CONTACT MAIL - FLASHCARD</title>
+            <title>FEEDBACK or CONTACT MAIL - FlashWiz</title>
         </head>
         <body>
             <div>
@@ -317,7 +316,7 @@ export const contact = catchAsync(async (req, res, next) => {
 
   const mail = sendMail(
     process.env.SMTP_MAIL,
-    "FEEDBACK or CONTACT MAIL - FLASHCARD",
+    "FEEDBACK or CONTACT MAIL - FlashWiz",
     html
   );
   if (!mail)

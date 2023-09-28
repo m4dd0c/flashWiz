@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import {
   clearErr as authErr,
   clearMsg as authMsg,
