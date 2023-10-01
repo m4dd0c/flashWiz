@@ -94,7 +94,7 @@ export const fetchCards = catchAsync(async (req, res, next) => {
 });
 export const updateQAScore = catchAsync(async (req, res, next) => {
   const { score } = req.body;
-  if (!score) return next(new ErrorHandler(404, "Invalid Score"));
+  if (score === null || score === undefined) return next(new ErrorHandler(404, "Invalid Score"));
   const { card_id, qa_id } = req.query;
   if (!card_id || !qa_id)
     return next(new ErrorHandler(404, "Card Not Found with this Subject!"));
