@@ -20,34 +20,61 @@ import {
   PencilIcon,
 } from "react-native-heroicons/outline";
 import { styles } from "../../theme/style";
+import { useDispatch, useSelector } from "react-redux";
+import LoadingScreen from "../LoadingScreen";
+import { showInfo } from "../../api/api";
+import { editProfile, fetchUser } from "../../store/actions/authAction";
+
 const EditProfile = ({ navigation, route }) => {
-  const [name, setName] = useState("");
-  const [avatar, setAvatar] = useState("");
+  const dispatch = useDispatch();
+  const { loading, user, msg, err } = useSelector((state) => state.auth);
+  // states
+  const [name, setName] = useState(user?.name);
+  const [avatar, setAvatar] = useState(user?.avatar?.url);
+
   // submit handler
-  const submitHandler = () => {
-    console.log("submit register");
+  const submitHandler = async () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("avatar", {
       uri: avatar,
-      type: mime.getType("avatar"),
+      type: mime.getType(avatar),
       name: avatar.split("/").pop(),
     });
+    await dispatch(editProfile(formData));
+    dispatch(fetchUser());
   };
+
+  //getting img
   useEffect(() => {
     if (route.params && route.params.avatar) {
       setAvatar(route.params.avatar);
     }
   }, [route]);
-  return (
+
+  //toast
+  useEffect(() => {
+    if (msg) {
+      showInfo(msg, dispatch);
+      setTimeout(() => navigation.navigate("profile"), 1000);
+    }
+    if (err) showInfo(err, dispatch, 0);
+  }, [msg, err]);
+
+  return loading ? (
+    <LoadingScreen />
+  ) : (
     <SafeAreaView className="flex-1 p-6 bg-white">
       <View className="flex-row justify-between items-center">
-        <Text style={{...styles.title, fontSize: 35}}>Edit Profile</Text>
+        <Text style={{ ...styles.title, fontSize: 35 }}>Edit Profile</Text>
         <View className="flex-row items-center">
           <TouchableOpacity onPress={() => navigation.navigate("contact")}>
             <EnvelopeIcon color="black" size={30} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("dangerZone")} className='ml-4'>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("dangerZone")}
+            className="ml-4"
+          >
             <Cog6ToothIcon color="black" size={30} />
           </TouchableOpacity>
         </View>

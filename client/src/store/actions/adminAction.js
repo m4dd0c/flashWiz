@@ -7,8 +7,7 @@ export const fetchAllUsers = () => async (dispatch) => {
     const { data } = await instance.get("/admin/users");
     dispatch(getUsersRes(data));
   } catch (error) {
-    console.log(error);
-    dispatch(err(error.response.data.error));
+    dispatch(err(error?.response?.data?.message));
   }
 };
 // delete any user
@@ -18,8 +17,7 @@ export const deleteUserAdmin = (id) => async (dispatch) => {
     const { data } = await instance.delete(`/admin/action/${id}`);
     dispatch(res(data));
   } catch (error) {
-    console.log(error);
-    dispatch(err(error.response.data.error));
+    dispatch(err(error?.response?.data?.message));
   }
 };
 //change role
@@ -29,7 +27,6 @@ export const changeRole = (id) => async (dispatch) => {
     const { data } = await instance.get(`/admin/action/${id}`);
     dispatch(res(data));
   } catch (error) {
-    console.log(error);
-    dispatch(err(error.response.data.error));
+    dispatch(err(error?.response?.data?.message));
   }
 };

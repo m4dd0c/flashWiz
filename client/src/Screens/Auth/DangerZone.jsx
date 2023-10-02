@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -13,15 +13,35 @@ import {
 } from "react-native-responsive-screen";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles } from "../../theme/style";
+import { useDispatch, useSelector } from "react-redux";
+import { change, deleteProfile } from "../../store/actions/authAction";
+import { showInfo } from "../../api/api";
+import LoadingScreen from "../LoadingScreen";
+import { logoutRes } from "../../store/reducer/authReducer";
 
-const DangerZone = () => {
+const DangerZone = ({ navigation }) => {
+  const dispatch = useDispatch();
+
+  //store
+  const { msg, loading, err, user } = useSelector((state) => state.auth);
+
+  //delete account require states
+  const [email, setEmail] = useState(user?.email ?? "");
+  const [password, setPassword] = useState("");
+  //change password required states
+  const [currPass, setCurrPass] = useState("");
+  const [newPass, setNewPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+  const [showError, setShowError] = useState(false);
+
   //delete Account request
-  const deleteAccount = () => {
-    console.log("account deleted");
+  const deleteAccount = async () => {
+    await dispatch(deleteProfile(email, password));
+    dispatch(logoutRes());
   };
 
+  //delete account popup
   const deleteHandler = () => {
-    console.log("delete handler");
     //showing alert before proceeding
     Alert.alert(
       "Delete Your Account",
@@ -38,21 +58,28 @@ const DangerZone = () => {
       ]
     );
   };
-  const [currPass, setCurrPass] = useState("");
-  const [newPass, setNewPass] = useState("");
-  const [confirmPass, setConfirmPass] = useState("");
-  const [showError, setShowError] = useState(false);
 
-  // submit handler
+  // change password submit handler
   const submitHandler = () => {
     if (confirmPass !== newPass) {
       return setShowError(true);
     } else {
       setShowError(false);
     }
-    console.log("submit change");
+    dispatch(change(currPass, newPass));
   };
-  return (
+  //show info
+  useEffect(() => {
+    if (msg) {
+      showInfo(msg, dispatch);
+      setTimeout(() => navigation.navigate("reset"), 1000);
+    }
+    if (err) showInfo(err, dispatch, 0);
+  }, [msg, err]);
+
+  return loading ? (
+    <LoadingScreen />
+  ) : (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView>
         <View style={{ height: hp("50%") }} className="border-2">
@@ -107,8 +134,23 @@ const DangerZone = () => {
         >
           <View style={{ width: wp("80%") }}>
             <Text style={styles.title}>Danger Zone</Text>
+            <TextInput
+              className="bg-slate-50 h-12 rounded-lg px-4 my-4"
+              style={{ width: wp("80%"), ...styles.reg }}
+              placeholder="Your Email"
+              onChangeText={setEmail}
+              value={email}
+            />
+            <TextInput
+              className="bg-slate-50 h-12 rounded-lg px-4"
+              style={{ width: wp("80%"), ...styles.reg }}
+              placeholder="Password"
+              onChangeText={setPassword}
+              value={password}
+            />
             <TouchableOpacity
               onPress={deleteHandler}
+              disabled={!password || !email}
               className="rounded-xl bg-red-400 py-3 my-4"
               style={{ width: wp("38%") }}
             >

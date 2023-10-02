@@ -16,6 +16,21 @@ export const styles = {
     textAlign: "center",
     fontFamily: "montBold",
   },
+
+  //table
+  container: { padding: 16, paddingTop: 30, backgroundColor: "#fff" },
+  head: { height: 45, backgroundColor: "#f1f8ff" },
+  row: { flexDirection: "row" },
+  text: {
+    margin: 10,
+    textAlign: "center",
+    fontFamily: "montReg",
+  },
+  headText: {
+    margin: 10,
+    textAlign: "center",
+    fontFamily: "montBold",
+  },
 };
 
 const gradients = [

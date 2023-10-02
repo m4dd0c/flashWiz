@@ -14,20 +14,27 @@ import {
 } from "react-native-responsive-screen";
 import { styles } from "../../theme/style";
 import { useDispatch, useSelector } from "react-redux";
-import { verify } from "../../store/actions/authAction";
+import { fetchUser, verify } from "../../store/actions/authAction";
 import LoadingScreen from "../LoadingScreen";
 import { showInfo } from "../../api/api";
-const Verify = () => {
+const Verify = ({ navigation }) => {
   const dispatch = useDispatch();
+  //states
   const [otp, setOtp] = useState("");
   const { loading, msg, err } = useSelector((state) => state.auth);
+
   // submit handler
   const submitHandler = async () => {
-    dispatch(verify(otp));
+    await dispatch(verify(otp));
+    dispatch(fetchUser());
   };
 
+  //showing toast
   useEffect(() => {
-    if (msg) showInfo(msg, dispatch);
+    if (msg) {
+      showInfo(msg, dispatch);
+      setTimeout(() => navigation.navigate("profile"), 1000);
+    }
     if (err) showInfo(err, dispatch, 0);
   }, [err, msg]);
 
@@ -53,6 +60,7 @@ const Verify = () => {
             placeholder="OTP Here"
             onChangeText={setOtp}
             value={otp}
+            keyboardType="numeric"
           />
           <TouchableOpacity
             onPress={submitHandler}

@@ -16,39 +16,42 @@ import {
 import { PencilIcon } from "react-native-heroicons/outline";
 import { styles } from "../../theme/style";
 import { useDispatch, useSelector } from "react-redux";
-import { login, signup } from "../../store/actions/authAction";
-import axios from "axios";
-import { instance } from "../../store/constants/constants";
+import { signup } from "../../store/actions/authAction";
+import LoadingScreen from "../LoadingScreen";
 const Signup = ({ navigation, route }) => {
+  //dispatch - store
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.auth);
+  //states
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
+
   // submit handler
   const submitHandler = async () => {
-    console.log("submit register");
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
     formData.append("password", password);
     formData.append("avatar", {
       uri: avatar,
-      type: mime.getType("avatar"),
+      type: mime.getType(avatar),
       name: avatar.split("/").pop(),
     });
     dispatch(signup(formData));
-
-    // dispatch(login("manishsuthar078@gmail.com", "password"));
   };
-  // const {user} = useSelector(state => state.auth)
-  // console.log(user);
+
+  // getting img
   useEffect(() => {
     if (route.params && route.params.avatar) {
       setAvatar(route.params.avatar);
     }
   }, [route]);
-  return (
+
+  return loading ? (
+    <LoadingScreen />
+  ) : (
     <SafeAreaView className="flex-1 p-6 bg-white">
       <View>
         <Text style={styles.title}>REGISTER</Text>
@@ -107,7 +110,7 @@ const Signup = ({ navigation, route }) => {
           />
           <TouchableOpacity
             onPress={submitHandler}
-            // disabled={!name || !email || !password || !avatar}
+            disabled={!name || !email || !password || !avatar}
             style={{ width: wp("80%") }}
             className="my-4 rounded-xl bg-slate-700 py-3"
           >

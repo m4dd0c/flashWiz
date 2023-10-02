@@ -12,6 +12,7 @@ import {
 } from "../store/reducer/cardReducer";
 import Toast from "react-native-toast-message";
 
+//show info msg function to show toaster
 export const showInfo = (msg, dispatch, isMsg = true, type = "auth") => {
   if (isMsg) {
     Toast.show({
@@ -41,4 +42,8 @@ export const showInfo = (msg, dispatch, isMsg = true, type = "auth") => {
       dispatch(cardErr());
     }
   }
+};
+// number formatter
+export const formatMe = (num) => {
+  return num < 10 ? "0" + num : num;
 };

@@ -9,13 +9,14 @@ import { styles } from "../../theme/style";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/actions/authAction";
-const Top = ({ user }) => {
+import { formatMe } from "../../api/api";
+const Top = ({ user,length }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [avatar, setAvatar] = useState("");
+  const [avatar, setAvatar] = useState(user?.avatar?.url);
+
   // logout itself
   const logoutFunc = () => {
-    console.log("logged out");
     dispatch(logout());
   };
 
@@ -59,7 +60,7 @@ const Top = ({ user }) => {
             className="h-36 w-36 rounded-full"
             source={
               avatar
-                ? { uri: user?.avatar?.url }
+                ? { uri: avatar }
                 : require("../../../assets/images/contact.jpg")
             }
             alt="loading..."
@@ -76,7 +77,7 @@ const Top = ({ user }) => {
             {user?.email}
           </Text>
           <Text className="text-lg" style={{ ...styles.thick, color: "white" }}>
-            Total Subject: 5
+            Total Subject: {formatMe(length)}
           </Text>
           {!user?.verification && (
             <TouchableOpacity onPress={() => navigationHandler("verify")}>

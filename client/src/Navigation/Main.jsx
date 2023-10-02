@@ -18,32 +18,50 @@ import Verify from "../Screens/Auth/Verify";
 import Card from "../Components/shared/Card";
 import CardStack from "../Components/shared/CardStack";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchCards } from "../store/actions/cardAction";
 import { fetchUser } from "../store/actions/authAction";
 
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
-  const dispatch = useDispatch();
-  const [isAdmin, setIsAdmin] = useState(false);
-  // getting data if logged_in
-  useEffect(() => {
-    dispatch(fetchUser());
-  }, [dispatch]);
   // getting data from store
   const { user, isAuth } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(isAuth);
+
+  // getting data if logged_in
+  useEffect(() => {
+    //fetching cards
+    if (user) {
+      dispatch(fetchCards());
+      setIsAuthenticated(true);
+    }
+  }, [dispatch, user]);
+
+  // fetch user
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, []);
+
   // setting admin
   useEffect(() => {
-    if (isAuth) {
+    if (isAuthenticated) {
       user.role === "admin" ? setIsAdmin(true) : setIsAdmin(false);
     }
+  }, [isAuthenticated]);
+  // isAuth state
+  useEffect(() => {
+    setIsAuthenticated(isAuth);
   }, [isAuth]);
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName={isAuth ? "profile" : "login"}
+        initialRouteName={isAuthenticated ? "profile" : "login"}
       >
-        {isAuth ? (
+        {isAuthenticated ? (
           <>
             {isAdmin && <Stack.Screen name="dashboard" component={Dashboard} />}
             <Stack.Screen name="playground" component={Playground} />
@@ -59,14 +77,14 @@ const Main = () => {
           <>
             <Stack.Screen name="login" component={Login} />
             <Stack.Screen name="signup" component={Signup} />
-            <Stack.Screen name="reset" component={Reset} />
             <Stack.Screen name="forget" component={Forget} />
           </>
         )}
+        <Stack.Screen name="reset" component={Reset} />
         <Stack.Screen name="contact" component={Contact} />
         <Stack.Screen name="camera" component={CameraScr} />
       </Stack.Navigator>
-      <Footer isAdmin={isAdmin} isAuth={isAuth} />
+      <Footer isAdmin={isAdmin} isAuth={isAuthenticated} />
     </NavigationContainer>
   );
 };

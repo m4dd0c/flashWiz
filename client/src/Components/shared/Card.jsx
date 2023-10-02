@@ -7,10 +7,8 @@ import {
 import { getGradient } from "../../theme/style";
 import FrontBack from "./FrontBack";
 
-const Card = ({ data = [1, 2, 3, 4, 5], isStack = true, num }) => {
+const Card = ({ data, isStack = true, card_id = null }) => {
   const fColors = getGradient();
-  const bColors = getGradient();
-
   return (
     <FlipCard
       style={
@@ -30,8 +28,8 @@ const Card = ({ data = [1, 2, 3, 4, 5], isStack = true, num }) => {
       flipVertical={false}
       className="overflow-hidden rounded-xl"
     >
-      <FrontBack isFront={true} customColors={fColors} num={num} />
-      <FrontBack isFront={false} customColors={bColors} num={num} />
+      <FrontBack isFront={true} customColors={fColors} data={data} isStack={isStack} card_id={card_id} />
+      <FrontBack isFront={false} customColors={fColors} data={data} isStack={isStack} card_id={card_id} />
     </FlipCard>
   );
 };

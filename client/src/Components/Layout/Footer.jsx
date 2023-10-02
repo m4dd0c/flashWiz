@@ -10,7 +10,6 @@ import {
 import { styles } from "../../theme/style";
 
 const Footer = ({ isAuth, isAdmin }) => {
-  // console.log(isAdmin);
   const navigation = useNavigation();
   return isAuth ? (
     <View className="py-3 flex-row justify-evenly items-center">

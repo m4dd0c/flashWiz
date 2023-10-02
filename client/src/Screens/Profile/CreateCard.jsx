@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Image,
@@ -9,18 +9,24 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { styles } from "../../theme/style";
+import { useDispatch, useSelector } from "react-redux";
+import { createCard, fetchCards } from "../../store/actions/cardAction";
+import { showInfo } from "../../api/api";
+import LoadingScreen from "../LoadingScreen";
 const CreateCard = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const { loading, msg, err } = useSelector((state) => state.cards);
+  //card
   const [answer, setAnswer] = useState("");
   const [question, setQuestion] = useState("");
   const [subject, setSubject] = useState("");
+
   // submit handler
-  const submitHandler = () => {
-    console.log("submit create card");
+  const submitHandler = async () => {
+    await dispatch(createCard(question, answer, subject));
+    dispatch(fetchCards());
   };
 
   //cancel handler
@@ -43,7 +49,19 @@ const CreateCard = ({ navigation }) => {
       }
     );
   };
-  return (
+
+  //toast
+  useEffect(() => {
+    if (msg) {
+      showInfo(msg, dispatch, 1, "card");
+      setTimeout(() => navigation.navigate("profile"), 1000);
+    }
+    if (err) showInfo(err, dispatch, 0, "card");
+  }, [msg, err]);
+
+  return loading ? (
+    <LoadingScreen />
+  ) : (
     <SafeAreaView className="flex-1 p-6 bg-white">
       <View>
         <Text style={{ ...styles.title, fontSize: 35 }}>Create Card</Text>
@@ -59,7 +77,12 @@ const CreateCard = ({ navigation }) => {
           </View>
           <TextInput
             className="bg-slate-50 rounded-lg p-4"
-            style={{ verticalAlign: "top", height: 120, width: wp("80%"), ...styles.reg }}
+            style={{
+              verticalAlign: "top",
+              height: 120,
+              width: wp("80%"),
+              ...styles.reg,
+            }}
             multiline
             numberOfLines={5}
             placeholder="Question, eg: Who created C language ?"
@@ -67,10 +90,15 @@ const CreateCard = ({ navigation }) => {
             value={question}
           />
           <TextInput
-             className="bg-slate-50 rounded-lg p-4 my-3"
-             style={{ verticalAlign: "top", height: 150, width: wp("80%"), ...styles.reg }}
-             multiline
-             numberOfLines={5}
+            className="bg-slate-50 rounded-lg p-4 my-3"
+            style={{
+              verticalAlign: "top",
+              height: 150,
+              width: wp("80%"),
+              ...styles.reg,
+            }}
+            multiline
+            numberOfLines={5}
             placeholder="Answer to Question, eg: Denis Ritche"
             onChangeText={setAnswer}
             value={answer}

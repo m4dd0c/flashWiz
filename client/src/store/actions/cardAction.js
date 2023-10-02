@@ -4,11 +4,10 @@ import { instance } from "../constants/constants";
 export const fetchCards = () => async (dispatch) => {
   try {
     dispatch(req());
-    const { data } = await instance.post("/card/");
+    const { data } = await instance.get("/card/");
     dispatch(fetchCardsRes(data));
   } catch (error) {
-    console.log(error);
-    dispatch(err(error.response.data.error));
+    dispatch(err(error?.response?.data?.message));
   }
 };
 // create Card
@@ -22,8 +21,7 @@ export const createCard = (question, answer, subject) => async (dispatch) => {
     });
     dispatch(res(data));
   } catch (error) {
-    console.log(error);
-    dispatch(err(error.response.data.error));
+    dispatch(err(error?.response?.data?.message));
   }
 };
 // delete card
@@ -38,13 +36,13 @@ export const deleteCard = (card_id, qa_id) => async (dispatch) => {
     });
     dispatch(res(data));
   } catch (error) {
-    console.log(error);
-    dispatch(err(error.response.data.error));
+    dispatch(err(error?.response?.data?.message));
   }
 };
 // update qa score
 export const updateQAScore = (score, card_id, qa_id) => async (dispatch) => {
   try {
+    console.log(score);
     dispatch(req());
     const { data } = await instance.put(
       "/card/action",
@@ -58,19 +56,17 @@ export const updateQAScore = (score, card_id, qa_id) => async (dispatch) => {
     );
     dispatch(res(data));
   } catch (error) {
-    console.log(error);
-    dispatch(err(error.response.data.error));
+    dispatch(err(error?.response?.data?.message));
   }
 };
 // update score
 export const updateScore = (id) => async (dispatch) => {
   try {
     dispatch(req());
-    const { data } = await instance.put(`/card/action/${id}`);
+    const { data } = await instance.get(`/card/action/${id}`);
     dispatch(res(data));
   } catch (error) {
-    console.log(error);
-    dispatch(err(error.response.data.error));
+    dispatch(err(error?.response?.data?.message));
   }
 };
 // delete subject
@@ -80,7 +76,6 @@ export const deleteSubject = (id) => async (dispatch) => {
     const { data } = await instance.delete(`/card/action/${id}`);
     dispatch(res(data));
   } catch (error) {
-    console.log(error);
-    dispatch(err(error.response.data.error));
+    dispatch(err(error?.response?.data?.message));
   }
 };

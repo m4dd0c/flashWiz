@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SwipeCards from "react-native-swipe-cards-deck";
 import Card from "./Card";
@@ -9,29 +9,33 @@ import {
 } from "react-native-responsive-screen";
 import StatusCard from "./StatusCard";
 
-const CardStack = ({handleWrong, handleCorrect}) => {
+const CardStack = ({ stack, handleWrong, handleCorrect }) => {
 
   const yupActions = {
-    onAction: handleCorrect,
+    onAction: (card) => handleCorrect(stack._id, card._id),
     show: false,
   };
   const nopeActions = {
-    onAction: handleWrong,
+    onAction: (card) => handleWrong(stack._id, card._id),
     show: false,
   };
-
   return (
     <SafeAreaView className="flex-1 justify-center items-center bg-white w-full flex-row ">
       <View style={{ height: hp("60%") }}>
         <SwipeCards
-          cards={[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]}
+          cards={stack?.qa}
           className="relative"
-          renderCard={(cardData) => (
-            <View style={{ width: wp("80%"), height: hp("60%") }}>
-              <Card data={cardData} isStack={true} num={cardData} />
-            </View>
-          )}
-          keyExtractor={(cardData) => String(cardData)}
+          renderCard={(cardData) => {
+            return (
+              <View
+                style={{ width: wp("80%"), height: hp("60%") }}
+                key={cardData._id}
+              >
+                <Card data={cardData} isStack={true} />
+              </View>
+            );
+          }}
+          keyExtractor={(cardData) => String(cardData._id)}
           renderNoMoreCards={() => <StatusCard />}
           actions={{
             nope: nopeActions,
@@ -47,7 +51,5 @@ const CardStack = ({handleWrong, handleCorrect}) => {
     </SafeAreaView>
   );
 };
-
-
 
 export default CardStack;

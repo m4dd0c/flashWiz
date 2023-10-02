@@ -31,13 +31,9 @@ const Forget = ({ navigation }) => {
   useEffect(() => {
     if (msg) {
       showInfo(msg, dispatch);
-      setTimeout(() => {
-        navigation.navigate("reset");
-      }, 1000);
+      setTimeout(() => navigation.navigate("reset"), 1000);
     }
-    if (err) {
-      showInfo(err, dispatch, 0);
-    }
+    if (err) showInfo(err, dispatch, 0);
   }, [msg, err]);
 
   return loading ? (

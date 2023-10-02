@@ -8,23 +8,27 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { styles } from "../../theme/style";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/actions/authAction";
+import LoadingScreen from "../LoadingScreen";
+
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [email, setEmail] = useState("manish@gmail.com");
+  const [password, setPassword] = useState("password");
   const { loading } = useSelector((state) => state.auth);
+
   // submit handler
   const submitHandler = async () => {
     dispatch(login(email, password));
   };
-  return (
+
+  return loading ? (
+    <LoadingScreen />
+  ) : (
     <SafeAreaView className="flex-1 p-6 bg-white">
       <View>
         <Text style={styles.title}>Login</Text>
@@ -38,7 +42,6 @@ const Login = ({ navigation }) => {
           />
         </View>
         <View
-          // style={{ height: hp("80%") }}
           className="flex justify-center items-center"
         >
           <TextInput
@@ -62,7 +65,6 @@ const Login = ({ navigation }) => {
             <Text style={styles.reg}>Forgotten Password ?</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            loading={loading}
             onPress={submitHandler}
             disabled={!email || !password}
             style={{ width: wp("80%") }}

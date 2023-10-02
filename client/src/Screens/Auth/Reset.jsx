@@ -19,10 +19,12 @@ import LoadingScreen from "../LoadingScreen";
 import { showInfo } from "../../api/api";
 const Reset = ({ navigation }) => {
   const dispatch = useDispatch();
+
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [showError, setShowError] = useState(false);
+
   const { loading, msg, err } = useSelector((state) => state.auth);
   // submit handler
   const submitHandler = () => {
@@ -44,6 +46,7 @@ const Reset = ({ navigation }) => {
       showInfo(err, dispatch, 0);
     }
   }, [msg, err]);
+  
   return loading ? (
     <LoadingScreen />
   ) : (

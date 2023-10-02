@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -13,16 +13,39 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { styles } from "../theme/style";
-const Contact = ({ navigation }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+import { useDispatch, useSelector } from "react-redux";
+import { showInfo } from "../api/api";
+import { contact } from "../store/actions/authAction";
+import LoadingScreen from "./LoadingScreen";
+const Contact = () => {
+  //store
+  const dispatch = useDispatch();
+  const {
+    loading,
+    err,
+    msg: stateMsg,
+    user,
+  } = useSelector((state) => state.auth);
+  //state
+  const [name, setName] = useState(user?.name);
+  const [email, setEmail] = useState(user?.email);
   const [subject, setSubject] = useState("");
   const [msg, setMsg] = useState("");
+
   // submit handler
   const submitHandler = () => {
-    console.log("submit contact msg");
+    dispatch(contact(name, email, subject, msg));
   };
-  return (
+
+  // toast
+  useEffect(() => {
+    if (err) showInfo(err, dispatch, 0);
+    if (stateMsg) showInfo(stateMsg, dispatch);
+  }, [stateMsg, err]);
+
+  return loading ? (
+    <LoadingScreen />
+  ) : (
     <SafeAreaView className="flex-1 p-6 bg-white">
       <View>
         <Text style={styles.title}>Contact</Text>
