@@ -17,8 +17,8 @@ import LoadingScreen from "../LoadingScreen";
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
 
-  const [email, setEmail] = useState("manish@gmail.com");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { loading } = useSelector((state) => state.auth);
 
   // submit handler
@@ -41,9 +41,7 @@ const Login = ({ navigation }) => {
             className="h-56 w-56 mx-auto"
           />
         </View>
-        <View
-          className="flex justify-center items-center"
-        >
+        <View className="flex justify-center items-center">
           <TextInput
             className="bg-slate-50 h-12 rounded-lg px-4 m-4"
             style={{ width: wp("80%"), ...styles.reg }}
